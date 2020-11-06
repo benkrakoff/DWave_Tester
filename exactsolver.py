@@ -1,3 +1,6 @@
+#reference documentation
+#https://docs.ocean.dwavesys.com/en/stable/docs_dimod/reference/sampler_composites/samplers.html
+
 from dimod import ExactSolver
 
 Q = {}

@@ -1,3 +1,5 @@
+#docs for reference
+#https://docs.ocean.dwavesys.com/en/stable/docs_system/reference/samplers.html#dwavesampler
 from dwave.system import DWaveSampler
 import time
 
