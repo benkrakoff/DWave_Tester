@@ -1,5 +1,8 @@
 #docs for reference
 #https://docs.ocean.dwavesys.com/en/stable/docs_system/reference/samplers.html#dwavesampler
+#This may be helpful later to keep results
+#https://docs.ocean.dwavesys.com/en/stable/docs_dimod/reference/generated/dimod.SampleSet.to_pandas_dataframe.html#dimod.SampleSet.to_pandas_dataframe
+
 from dwave.system import DWaveSampler
 import time
 
