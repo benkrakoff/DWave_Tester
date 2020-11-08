@@ -3,19 +3,41 @@
 #This may be helpful later to keep results
 #https://docs.ocean.dwavesys.com/en/stable/docs_dimod/reference/generated/dimod.SampleSet.to_pandas_dataframe.html#dimod.SampleSet.to_pandas_dataframe
 
-from dwave.system import DWaveSampler
+from dwave.system import DWaveSampler, EmbeddingComposite
+import dwave_networkx as dnx
+import numpy as np
+import pandas as pd
+rng = np.random.default_rng()
 import time
 
-sampler = DWaveSampler()
-Q = {}
-qubits = [sampler.nodelist[0]]
+edge_weights = {}
 
-for i in range(10):
-    qubits.append(next(iter(sampler.adjacency[qubits[-1]])))
-    Q[(qubits[-2], qubits[-1])] = -1
+G = dnx.pegasus_graph(2)
 
-t_1 = time.time()
-sampleset = sampler.sample_ising({}, Q, num_reads = 100)
-t_2 = time.time()
+for i in range(4):
 
-print((sampleset.first.sample, t_2-t_1))
+    for e in G.edges():
+        edge_weights[e] = 2*rng.binomial(1, .5)-1
+    H = {}
+
+    for n in G.nodes():
+        col = []
+        for m in G.nodes():
+            if (n, m) in G.edges():
+                col.append(edge_weights[(min(n, m), max(n, m))])
+            else:
+                col.append(0)
+        H[n] = col
+ 
+    pd.DataFrame.from_dict(H).to_csv("Hamiltonian_{k}".format(k = i+2))
+
+    t_1 = time.time()
+    sampleset = EmbeddingComposite(DWaveSampler()).sample_ising({}, edge_weights, num_reads = 1000)
+    t_2 = time.time()
+
+    sampleset.to_pandas_dataframe().to_csv("Sampler_Data_{k}".format(k=i+2))
+
+    time_data = pd.read_csv("Time_Data")
+    time_data.insert(len(time_data.columns), "Hamiltonian_{k}".format(k = i+2), t_2 - t_1)
+    time_data.to_csv("Time_Data")
+
