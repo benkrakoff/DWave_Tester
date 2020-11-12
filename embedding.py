@@ -7,7 +7,8 @@ rng = np.random.default_rng()
 
 edge_weights = {}
 
-G = nx.complete_graph(40)
+#G = nx.complete_graph(40)
+G = dnx.pegasus_graph(5)
 
 for e in G.edges():
     edge_weights[e] = 2*rng.binomial(1, .5)-1
@@ -23,4 +24,6 @@ for n in G.nodes():
                 col.append(0)
         H[n] = col
 
-pd.DataFrame.from_dict(H).to_csv("Test Clique Hamiltonian")
+print(len(G.nodes()))
+
+#pd.DataFrame.from_dict(H).to_csv("Test Clique Hamiltonian")
