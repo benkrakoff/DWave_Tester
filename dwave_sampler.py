@@ -3,7 +3,7 @@
 #This may be helpful later to keep results
 #https://docs.ocean.dwavesys.com/en/stable/docs_dimod/reference/generated/dimod.SampleSet.to_pandas_dataframe.html#dimod.SampleSet.to_pandas_dataframe
 
-from dwave.system import DWaveSampler, EmbeddingComposite
+from dwave.system import DWaveSampler, EmbeddingComposite, DWaveCliqueSampler
 import dwave_networkx as dnx
 import networkx as nx
 import numpy as np
@@ -12,7 +12,7 @@ rng = np.random.default_rng()
 import time
 
 edge_weights = {}
-
+#G = dnx.pegasus_graph(2)
 G = nx.complete_graph(40)
 
 for i in range(5):
@@ -33,7 +33,10 @@ for i in range(5):
     pd.DataFrame.from_dict(H).to_csv("Clique_Hamiltonian_{k}".format(k = i+1))
 
     t_1 = time.time()
-    sampleset = EmbeddingComposite(DWaveSampler()).sample_ising({}, edge_weights, num_reads = 1000)
+    #sampler for sparse graphs
+    #sampleset = EmbeddingComposite(DWaveSampler()).sample_ising({}, edge_weights, num_reads = 1000)
+    #sampler for clique graphs
+    sampleset = DWaveCliqueSampler().sample_ising({}, edge_weights, num_reads = 1000)
     t_2 = time.time()
 
     sampleset.to_pandas_dataframe().to_csv("Clique_Sampler_Data_{k}".format(k=i+1))
