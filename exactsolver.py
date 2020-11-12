@@ -11,4 +11,4 @@ for i in range(10):
 
 data = ExactSolver().sample_ising(h, Q).to_pandas_dataframe()
 
-data.to_csv("Data.csv")
+data.to_csv("Data_1.csv")
