@@ -12,8 +12,8 @@ rng = np.random.default_rng()
 import time
 
 edge_weights = {}
-G = dnx.pegasus_graph(5)
-#G = nx.complete_graph(119)
+#G = dnx.pegasus_graph(5)
+G = nx.complete_graph(119)
 
 for i in range(6, 11):
 
@@ -31,18 +31,18 @@ for i in range(6, 11):
                 col.append(0)
         H[n] = col
  
-    pd.DataFrame.from_dict(H).to_csv("Gauss_Hamiltonian_{k}".format(k = i))
+    pd.DataFrame.from_dict(H).to_csv("Clique_Gauss_Hamiltonian_{k}".format(k = i))
 
     t_1 = time.time()
     #sampler for sparse graphs
-    sampleset = EmbeddingComposite(DWaveSampler()).sample_ising({}, edge_weights, num_reads = 1000)
+    #sampleset = EmbeddingComposite(DWaveSampler()).sample_ising({}, edge_weights, num_reads = 1000)
     #sampler for clique graphs
-    #sampleset = DWaveCliqueSampler().sample_ising({}, edge_weights, num_reads = 1000)
+    sampleset = DWaveCliqueSampler().sample_ising({}, edge_weights, num_reads = 1000)
     t_2 = time.time()
 
-    sampleset.to_pandas_dataframe().to_csv("Gauss_Sampler_Data_{k}".format(k=i))
+    sampleset.to_pandas_dataframe().to_csv("Clique_Gauss_Sampler_Data_{k}".format(k=i))
 
     time_data = pd.read_csv("Time_Data")
-    time_data["Gauss_Hamiltonian_{k}".format(k = i)] = [t_2 - t_1]
+    time_data["Clique_Gauss_Hamiltonian_{k}".format(k = i)] = [t_2 - t_1]
     time_data.to_csv("Time_Data")
 
